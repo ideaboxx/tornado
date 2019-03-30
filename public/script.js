@@ -14,6 +14,10 @@ socket.on('disconnect',function(){
   alert("Disconnected from server..");
 });
 
+socket.on('alert-message',function(msg){
+  $("#status_msg").text(msg)
+});
+
 socket.on('get-update', function (data) {
 
   var name = data.name;
@@ -58,9 +62,6 @@ $(document).ready(function(){
 
   $("#delete_btn").click(function(){
     socket.emit('destroy-torrent');
-    socket.on('destroy-torrent',function(){
-      alert("Torrent destroyed and deleted !")
-    });
   })
 
   $("#progress_btn").click(function(){

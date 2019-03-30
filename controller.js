@@ -1,6 +1,7 @@
-const WebTorrent = require("webtorrent");
-const constants = require("./constants");
-var rimraf = require("rimraf");
+const WebTorrent = require('webtorrent');
+const constants = require('./constants');
+const uploadToDrive = require('./uploadToDrive')
+const rimraf = require('rimraf');
 
 let client = new WebTorrent();
 let torrent = null;
@@ -13,6 +14,7 @@ module.exports = function(app, io){
 
   io.on('connection', (socket) => {
     
+    /* call this channel when new magnet link is input */
     socket.on(constants.magnet, (data) => {
       if(data.magnet || data.magnet.trim() != ''){
         try {
@@ -25,18 +27,19 @@ module.exports = function(app, io){
       }
     });
 
+    /* Call this channel when you want to destroy torrent */
     socket.on(constants.destroy, () => {
-      if(torrent) { 
-        let pathToTorrentFiles = constants.downloadPath + torrent.name;
-        torrent.destroy(function(){
-          rimraf(pathToTorrentFiles, function () { 
-            console.log("> Torrent download stopped and files cleared")
-            socket.emit(constants.destroy);
-          })
+      if(!torrent) return
+      let pathToTorrentFiles = constants.downloadPath + torrent.name;
+      torrent.destroy(function(){
+        rimraf(pathToTorrentFiles, function () { 
+          console.log("> Torrent download stopped and files cleared")
+          socket.emit(constants.alertMessage,"Torrent download stopped..")
         })
-      }
+      })
     });
 
+    /* Call this channel when you want to get updates about torrent */
     socket.on(constants.getUpdate, () => {
       if(torrent) {
         let data = {
@@ -46,6 +49,7 @@ module.exports = function(app, io){
           downloaded: torrent.downloaded,
           files: []
         }
+
         for(let i in torrent.files){
           let fileObj = {
             filename: torrent.files[i].name,
@@ -60,6 +64,16 @@ module.exports = function(app, io){
         if(data.progress == 1){
           torrent.destroy()
           console.log("> Torrent Downloaded: " + data.name)
+          socket.emit(constants.alertMessage,"Torrent Downloaded..")
+
+          let pathToTorrentFiles = constants.downloadPath + torrent.name
+          uploadToDrive(pathToTorrentFiles).then(()=>{
+            socket.emit(constants.alertMessage,"Uploaded to GDrive..")
+          })
+          .catch((exception)=>{
+            socket.emit(constants.alertMessage,"Uploaded to GDrive failed..")
+            console.log(exception)
+          })
         }
         socket.emit(constants.getUpdate, data);
       }
