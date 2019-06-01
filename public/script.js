@@ -10,6 +10,15 @@ function formatBytes(bytes,decimals) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+socket.on('get-pending-queue', function(data){
+  var list = "";
+  for(var i=0; i<data.length; i++){
+    list += "<li>"+decodeURI(data[i].match(/&dn=(.*?)&/s)[1])+"</li>";
+  }
+  $("#queue").html(list)
+  console.log(list);
+});
+
 socket.on('disconnect',function(){
   alert("Disconnected from server..");
 });
@@ -66,6 +75,10 @@ $(document).ready(function(){
 
   $("#progress_btn").click(function(){
     socket.emit('get-update');
+  })
+
+  $("#get_queue_btn").click(function(){
+    socket.emit('get-pending-queue');
   })
 
 })
