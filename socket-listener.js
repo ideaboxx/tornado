@@ -39,6 +39,7 @@ module.exports = function (socket) {
         console.log("> Torrent download stopped and files cleared")
         socket.emit(constants.alertMessage, "Torrent download stopped..")
       })
+      torrent = null
     })
   });
 
