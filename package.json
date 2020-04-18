@@ -18,6 +18,6 @@
     "mustache-express": "^1.2.8",
     "rimraf": "^2.6.3",
     "socket.io": "^2.2.0",
-    "webtorrent": "^0.103.1"
+    "webtorrent": "^0.108.1"
   }
 }
