@@ -1,19 +1,18 @@
-const app = require('express')();
-const server = require('http').Server(app)
-const socket = require('socket.io')(server)
+const express = require('express')
+const app = express()
 const path = require('path')
-const mustacheExpress = require('mustache-express')
-const controller = require('./controller')
+
+const constant = require('./lib/constants')
+const api = require('./api')
+
+// Use to serve the `public` and `download` dir
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('downloads', express.static(constant.downloadPath))
+
+/** Common APIs */
+app.use('/api', api)
 
 const PORT = process.env.PORT || 5000
-
-app.use(require('express').static(path.join(__dirname, 'public')))
-app.engine('html', mustacheExpress())
-app.set('view engine','html')
-app.set('views',path.join(__dirname, 'pages'))
-
-controller(app, socket);
-
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`)
 })
