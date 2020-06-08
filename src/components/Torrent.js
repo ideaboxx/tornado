@@ -17,13 +17,13 @@ export default function Torrent({data}){
     }
 
     return (
-        <div className="border border-gray-300 p-4 rounded-md">
-            <div className="float-left bg-yellow-200 text-yellow-600 mt-1 p-3 rounded-full mr-3">
+        <div className="my-2 border border-gray-300 p-4 rounded-md">
+            {/*<div className="float-left bg-yellow-200 text-yellow-600 mt-1 p-3 rounded-full mr-3">
                 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.828 4a3 3 0 0 1-2.12-.879l-.83-.828A1 1 0 0 0 6.173 2H2.5a1 1 0 0 0-1 .981L1.546 4h-1L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3v1z"/>
                     <path fillRule="evenodd" d="M13.81 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zM2.19 3A2 2 0 0 0 .198 5.181l.637 7A2 2 0 0 0 2.826 14h10.348a2 2 0 0 0 1.991-1.819l.637-7A2 2 0 0 0 13.81 3H2.19z"/>
                 </svg>
-            </div>
+            </div>*/}
             <button onClick={deleteTorr} className="float-right hover:bg-red-100 text-red-500 rounded-lg p-3 focus:outline-none">
                 <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -42,8 +42,8 @@ export default function Torrent({data}){
                     </svg>
                 </button>
             }
-            <h2 className="mt-1">{ data.name }</h2>
-            <h3 className="text-xs text-gray-700">{data.numPeers} Peers &nbsp; Ratio: { data.ratio }</h3>
+            <h2 className="mt-1 text-gray-800">{ data.name }</h2>
+            <h3 className="text-xs text-gray-700">{data.numPeers} Peers &nbsp; Ratio: { data.ratio.toFixed(2) }</h3>
             <div className="my-2 bg-blue-100 rounded-md overflow-hidden my-4 mb-2">
                 <div className="bg-blue-500 h-2" style={{"width":`${(data.progress*100).toFixed(2)}%`}}></div>
             </div>

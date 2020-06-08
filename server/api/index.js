@@ -5,14 +5,17 @@ const constant = require('../lib/constants.json')
 const uploadToDrive = require('../lib/uploadToDrive')
 
 const client = new WebTorrent({ maxConns: 500 })
-
 router.use(express.json());
+const torrentsUploadingToDrive = {}
 
-// middleware that is specific to this router
-router.use(function timeLog (req, res, next) {
-  console.log('Time: ', Date.now())
-  next()
-})
+function onReady(torrent){
+    torrent.on('done', ()=>{
+        torrentsUploadingToDrive[torrent.infoHash] = true
+        uploadToDrive(torrent).then(()=>{
+            delete torrentsUploadingToDrive[torrent.infoHash]
+        })
+    })
+}
 
 // define the home page route
 router.get('/getAllTorrents', function (req, res) {
@@ -21,8 +24,10 @@ router.get('/getAllTorrents', function (req, res) {
         const { name, infoHash, downloaded, uploaded, 
             downloadSpeed, uploadSpeed, progress, ratio, 
             numPeers, path, ready, paused, done, length } = torrent
+        const uploadedToDrive = done && torrentsUploadingToDrive[infoHash] === true ? 
+            'inProgress' : 'done' 
         torrentList.push({ name, infoHash, downloaded, uploaded, 
-            downloadSpeed, uploadSpeed, progress, ratio, 
+            downloadSpeed, uploadSpeed, progress, ratio, uploadedToDrive,
             numPeers, path, ready, paused, done, length })
     }
     res.send({ status: 'success', torrentList })
@@ -32,9 +37,7 @@ router.get('/getAllTorrents', function (req, res) {
 router.post('/addTorrent', function (req, res) {
     const { magnet, torrentFile } = req.body
     const torrentId = magnet || (new Buffer(torrentFile))
-    client.add(torrentId, { path: constant.downloadPath }, function(torrent){
-        torrent.on('done', ()=>uploadToDrive(torrent))
-    })
+    client.add(torrentId, { path: constant.downloadPath }, onReady)
     console.log(">> torrent added")
     res.send({
         status: "success"
