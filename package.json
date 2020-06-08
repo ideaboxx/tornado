@@ -1,5 +1,5 @@
 {
-  "name": "torfetch",
+  "name": "tornedo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.heroku.com/torfetch.git"
+    "url": "https://git.heroku.com/tornedo.git"
   },
   "author": "tilak",
   "dependencies": {
