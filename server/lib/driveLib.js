@@ -7,7 +7,7 @@ const { client_secret, client_id, redirect_uris } = require('./credentials.json'
 const token = require('./token.json')
 const drive = google.drive('v3')
 
-const oAuthClient;
+let oAuthClient = null;
 
 /**
  * get oAuth2Client from google api
@@ -15,6 +15,7 @@ const oAuthClient;
  */
 function getAuthClient(tokenPath) {
   return new Promise((resolve, reject) => {
+    if(oAuthClient != null) resolve(oAuthClient)
     oAuthClient = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0])
     oAuthClient.setCredentials(token)
     resolve(oAuthClient)
@@ -28,7 +29,7 @@ function getAuthClient(tokenPath) {
  */
 function createFolder(parentId, folderName, oAuth){
   return drive.files.create({
-    auth: oAuthClient || oAuth, 
+    auth: oAuth || oAuthClient, 
     fields: 'id',
     resource: {
       name: folderName,
@@ -43,11 +44,12 @@ function createFolder(parentId, folderName, oAuth){
  * @param {string} parentId 
  * @param {string} serverFilePath 
  * @param {oAuthClient(string)} oAuth 
+ * @returns Drive.File
  */
 function uploadFile(parentId, serverFilePath, oAuth){
   let filename = path.basename(serverFilePath)
   return drive.files.create({
-    auth: oAuthClient || oAuth,
+    auth: oAuth || oAuthClient,
     fields: 'id',
     media: { 
       body: fs.createReadStream(serverFilePath) 
@@ -57,3 +59,5 @@ function uploadFile(parentId, serverFilePath, oAuth){
     }
   })
 }
+
+module.exports = { getAuthClient, createFolder, uploadFile}

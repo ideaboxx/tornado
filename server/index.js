@@ -6,7 +6,7 @@ const constant = require('./lib/constants')
 const api = require('./api')
 
 // Use to serve the `public` and `download` dir
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'build')))
 app.use('downloads', express.static(constant.downloadPath))
 
 /** Common APIs */
