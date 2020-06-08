@@ -6,7 +6,7 @@ module.exports = {
         require('autoprefixer'),
         process.env.NODE_ENV === 'production' &&
         purgeCSS({
-            content: ['./react/src/**/*.html', './react/src/**/*.tsx', './react/src/**/*.ts']
+            content: ['./src/**/*.html', './src/**/*.tsx', './src/**/*.ts']
         })
     ]
 }
