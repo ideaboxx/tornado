@@ -1,8 +1,7 @@
 {
   "name": "tornedo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "proxy": "http://localhost:8080",
   "scripts": {
     "postcss:watch": "postcss ./src/style.css -o ./src/App.css -w",
     "postcss": "postcss ./src/style.css -o ./src/App.css",

@@ -12,7 +12,7 @@ app.use('downloads', express.static(constant.downloadPath))
 /** Common APIs */
 app.use('/api', api)
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`)
 })

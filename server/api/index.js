@@ -37,7 +37,7 @@ router.post('/addTorrent', function (req, res) {
     })
     console.log(">> torrent added")
     res.send({
-        result: "success"
+        status: "success"
     })
 })
 
@@ -50,7 +50,7 @@ router.post('/getFiles', function(req, res){
         const { name, path, length, downloaded, progress} = file
         files.push({ name, path, length, downloaded, progress })
     }
-    res.send(files)
+    res.send({ status: 'success', files})
 })
 
 router.post('/actionDelete', function(req, res){
