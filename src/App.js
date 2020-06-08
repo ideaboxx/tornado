@@ -17,7 +17,7 @@ function App() {
         if(data.status === 'success') setTorrentList(data.torrentList)
         else console.log('error', data)
       })
-    }, 2000)
+    }, 10000)
     return ()=>clearInterval(event)
   });
 

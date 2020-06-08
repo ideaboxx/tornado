@@ -7,12 +7,13 @@ export default function TorrentInput({ onUpdate }){
         if(e.target.type === 'file'){
             const reader = new FileReader()
             reader.addEventListener('load', (event) => {
+                const base64 = event.target.result
                 onUpdate({
                     type: 'file',
-                    value: event.target.result
+                    value: base64.replace('data:application/x-bittorrent;base64,','')
                 })
             })
-            reader.readAsText(e.target.files[0])
+            reader.readAsDataURL(e.target.files[0])
         } else {
             onUpdate({
                 type: inputText.startsWith("magnet") ? 'magnet':'url',

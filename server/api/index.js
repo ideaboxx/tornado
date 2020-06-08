@@ -36,7 +36,7 @@ router.get('/getAllTorrents', function (req, res) {
 // define the about route
 router.post('/addTorrent', function (req, res) {
     const { magnet, torrentFile } = req.body
-    const torrentId = magnet || (new Buffer(torrentFile))
+    const torrentId = magnet || Buffer.from(torrentFile, 'base64')
     client.add(torrentId, { path: constant.downloadPath }, onReady)
     console.log(">> torrent added")
     res.send({
