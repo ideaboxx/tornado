@@ -3,10 +3,26 @@ const router = express.Router()
 const WebTorrent = require('webtorrent')
 const constant = require('../lib/constants.json')
 const uploadToDrive = require('../lib/uploadToDrive')
+const https = require('https');
+
+router.use(express.json());
 
 const client = new WebTorrent({ maxConns: 500 })
-router.use(express.json());
 const torrentsUploadingToDrive = {}
+
+setInterval(()=>{
+    if(client.torrents.length > 0) {
+        https.get('https://tornedo.herokuapp.com')
+        console.log('pinging host')
+    }
+
+    for(const torrent of client.torrents) {
+        if(torrent.done === true && torrent.ratio > 1){
+            torrent.destroy()
+            console.log('Download removed', torrent.name)
+        }
+    }
+}, 1000*60*5)
 
 function onReady(torrent){
     torrent.on('done', ()=>{

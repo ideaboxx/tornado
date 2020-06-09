@@ -10,6 +10,10 @@ function formatBytes(bytes, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+function round(number, precision=2){
+    return (number || 0).toFixed(precision)
+}
+
 export default function Torrent({data}){
 
     const deleteTorr = ()=>{
@@ -43,12 +47,12 @@ export default function Torrent({data}){
                 </button>
             }
             <h2 className="mt-1 text-gray-800">{ data.name }</h2>
-            <h3 className="text-xs text-gray-700">{data.numPeers} Peers &nbsp; Ratio: { data.ratio.toFixed(2) }</h3>
+            <h3 className="text-xs text-gray-700">{data.numPeers} Peers &nbsp; Ratio: { round(data.ratio) }</h3>
             <div className="my-2 bg-blue-100 rounded-md overflow-hidden my-4 mb-2">
-                <div className="bg-blue-500 h-2" style={{"width":`${(data.progress*100).toFixed(2)}%`}}></div>
+                <div className="bg-blue-500 h-2" style={{"width":`${round(data.progress*100)}%`}}></div>
             </div>
             <div className="text-xs md:text-sm text-gray-600 text-center">
-                <span>{formatBytes(data.downloaded)} of {formatBytes(data.length)} - {(data.progress*100).toFixed(2)}%</span>
+                <span>{formatBytes(data.downloaded)} of {formatBytes(data.length)} - {round(data.progress*100)}%</span>
                 <span className="px-4">
                     <svg className="inline" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M4.646 7.646a.5.5 0 0 1 .708 0L8 10.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
