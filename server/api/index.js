@@ -11,16 +11,10 @@ const client = new WebTorrent({ maxConns: 500 })
 const torrentsUploadingToDrive = {}
 
 setInterval(()=>{
-    if(client.torrents.length > 0) {
+    const inProgress = client.torrents.filter((torrent)=>!torrent.done)
+    if (inProgress.length > 0) {
         https.get('https://tornedo.herokuapp.com')
         console.log('pinging host')
-    }
-
-    for(const torrent of client.torrents) {
-        if(torrent.done === true && torrent.ratio > 1){
-            torrent.destroy()
-            console.log('Download removed', torrent.name)
-        }
     }
 }, 1000*60*5)
 
