@@ -7,7 +7,7 @@ const https = require('https');
 
 router.use(express.json());
 
-const client = new WebTorrent({ maxConns: 500 })
+const client = new WebTorrent()
 const torrentsUploadingToDrive = {}
 
 setInterval(()=>{
