@@ -5,18 +5,29 @@ import TorrentInput from './components/TorrentInput';
 import { addTorrent, getAllTorrent } from './library/ajax'
 import './App.css'
 
+function populateTorrentList(setTorrentList){
+  getAllTorrent().then((data)=>{
+    if(data.status === 'success') setTorrentList(data.torrentList)
+    else console.log('error', data)
+  })
+}
+
+function historyList(){
+  
+}
+
 function App() {
+
   const [torrentList, setTorrentList] = useState([])
-  const onInput = (data)=>{
+  const [activeTab, setActiveTab] = useState(0)
+
+  const onInput = (data) => {
     addTorrent(data).then(console.log)
   }
 
   useEffect(() => {
     const event = setInterval(()=>{
-      getAllTorrent().then((data)=>{
-        if(data.status === 'success') setTorrentList(data.torrentList)
-        else console.log('error', data)
-      })
+      populateTorrentList(setTorrentList)
     }, 2000)
     return ()=>clearInterval(event)
   });
@@ -24,9 +35,9 @@ function App() {
   return (
     <div>
       <div className="w-full max-w-3xl mx-auto h-screen">
-        <Navbar />
+        <Navbar onClick={setActiveTab} active={activeTab}/>
         <TorrentInput onUpdate={onInput}/>
-        { torrentList.map(data=><Torrent data={data}/>) }
+        { activeTab === 0 ? torrentList.map(data=><Torrent data={data}/>) : historyList() }
       </div>
     </div>
   )

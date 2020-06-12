@@ -2,7 +2,7 @@ import React from 'react';
 import { deleteTorrent } from '../library/ajax'
 
 function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return '0 Bytes';
+    if (!bytes) return '0 Bytes';
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -52,7 +52,7 @@ export default function Torrent({data}){
                 <div className="bg-blue-500 h-2" style={{"width":`${round(data.progress*100)}%`}}></div>
             </div>
             <div className="text-xs md:text-sm text-gray-600 text-center">
-                <span>{formatBytes(data.downloaded)} of {formatBytes(data.length)} - {round(data.progress*100)}%</span>
+                <span>{formatBytes(data.downloaded)}/{formatBytes(data.length)} - {round(data.progress*100)}%</span>
                 <span className="px-4">
                     <svg className="inline" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M4.646 7.646a.5.5 0 0 1 .708 0L8 10.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>

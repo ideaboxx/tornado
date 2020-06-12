@@ -7,5 +7,6 @@
   "destroy": "destroy-torrent",
   "driveMediaFolder": "1uCr6DO_vPr0CAV9ZFalRBpdvEdNMH5eP",
   "alertMessage": "alert-message",
-  "getPendingQueue": "get-pending-queue"
+  "getPendingQueue": "get-pending-queue",
+  "postgresDev": "postgres://qqcvhrre:ATvhV6jfSSoZm4TDpz-2EzxZMZGvdxzs@satao.db.elephantsql.com:5432/qqcvhrre"
 }

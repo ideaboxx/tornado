@@ -1,13 +1,11 @@
 import React from 'react';
 
 const menuItems = [
-    { lable: 'All Torrents', value: 0 },
-    { lable: 'Active', value: 1 },
-    { lable: 'Scheduled', value: 2 },
-    { lable: 'Completed', value: 3 }
+    { lable: 'Active', value: 0 },
+    { lable: 'History', value: 1 }
 ]
 
-export default function Navbar(){
+export default function Navbar({active, onClick}){
     return (
         <div className="text-center">
             <h1 className="text-xl py-3 text-teal-600">
@@ -20,13 +18,13 @@ export default function Navbar(){
             <div className="bg-gray-100 my-3 rounded-md">
             {
                 menuItems.map((item,i)=>(
-                    <button key={i} className="p-1 px-4 hover:bg-gray-200 text-blue-900 rounded-md">
+                    <button key={i} onClick={()=>onClick(i)}
+                        className={"p-1 px-4 hover:bg-gray-200 text-blue-900 rounded-md "+(active === i?'text-blue-500':'')}> 
                         {item.lable}
                     </button>
                 ))
             }
             </div>
         </div>
-        
     )
 } 

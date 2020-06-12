@@ -4,11 +4,10 @@ const WebTorrent = require('webtorrent')
 const constant = require('../lib/constants.json')
 const uploadToDrive = require('../lib/uploadToDrive')
 const https = require('https');
+const db = require('../lib/db')
 
 router.use(express.json());
-
 const client = new WebTorrent()
-const torrentsUploadingToDrive = {}
 
 setInterval(()=>{
     const inProgress = client.torrents.filter((torrent)=>!torrent.done)
@@ -19,10 +18,16 @@ setInterval(()=>{
 }, 1000*60*5)
 
 function onReady(torrent){
+    db.insertIntoHistory({
+        torrentName: torrent.name,
+        infoHash: torrent.infoHash,
+        magnet: torrent.magnet,
+        status: 0
+    })
     torrent.on('done', ()=>{
-        torrentsUploadingToDrive[torrent.infoHash] = true
+        db.updateStatus({infoHash: torrent.infoHash, status: 2})
         uploadToDrive(torrent).then(()=>{
-            delete torrentsUploadingToDrive[torrent.infoHash]
+            db.updateStatus({infoHash: torrent.infoHash, status: 3})
         })
     })
 }
@@ -34,10 +39,8 @@ router.get('/getAllTorrents', function (req, res) {
         const { name, infoHash, downloaded, uploaded, 
             downloadSpeed, uploadSpeed, progress, ratio, 
             numPeers, path, ready, paused, done, length } = torrent
-        const uploadedToDrive = done && torrentsUploadingToDrive[infoHash] === true ? 
-            'inProgress' : 'done' 
         torrentList.push({ name, infoHash, downloaded, uploaded, 
-            downloadSpeed, uploadSpeed, progress, ratio, uploadedToDrive,
+            downloadSpeed, uploadSpeed, progress, ratio,
             numPeers, path, ready, paused, done, length })
     }
     res.send({ status: 'success', torrentList })
@@ -71,6 +74,7 @@ router.post('/actionDelete', function(req, res){
     const torrent = client.get(infoHash)
     try {
         torrent.destroy()
+        db.updateStatus({infoHash: torrent.infoHash, status: 4})
         res.send({
             status: 'success',
         })
@@ -112,6 +116,12 @@ router.post('/actionResume', function(req, res){
             message: e.toString()
         })
     }
+})
+
+router.get('/getLogs', function(req, res){
+    db.getAllHistory().then(rows=>res.send({
+        status: 'success', data: rows
+    }))
 })
 
 module.exports = router

@@ -28,3 +28,7 @@ export function getAllTorrent() {
 export function deleteTorrent(infoHash){
     return postData('/api/actionDelete', {infoHash})
 }
+
+export function getHistory() {
+    return fetch('/api/getHistory').then((data)=>(data.json()))
+}
