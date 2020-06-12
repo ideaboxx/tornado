@@ -119,7 +119,7 @@ router.post('/actionResume', function(req, res){
 })
 
 router.get('/getLogs', function(req, res){
-    db.getAllHistory().then(rows=>res.send({
+    db.getAllLogs().then(rows=>res.send({
         status: 'success', data: rows
     }))
 })
