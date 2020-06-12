@@ -18,16 +18,16 @@ setInterval(()=>{
 }, 1000*60*5)
 
 function onReady(torrent){
-    db.insertIntoHistory({
+    db.insertLog({
         torrentName: torrent.name,
         infoHash: torrent.infoHash,
-        magnet: torrent.magnet,
+        magnet: torrent.magnetURI,
         status: 0
     })
     torrent.on('done', ()=>{
-        db.updateStatus({infoHash: torrent.infoHash, status: 2})
+        db.updateLog({infoHash: torrent.infoHash, status: 2})
         uploadToDrive(torrent).then(()=>{
-            db.updateStatus({infoHash: torrent.infoHash, status: 3})
+            db.updateLog({infoHash: torrent.infoHash, status: 3})
         })
     })
 }
@@ -74,7 +74,7 @@ router.post('/actionDelete', function(req, res){
     const torrent = client.get(infoHash)
     try {
         torrent.destroy()
-        db.updateStatus({infoHash: torrent.infoHash, status: 4})
+        db.updateLog({infoHash: torrent.infoHash, status: 4})
         res.send({
             status: 'success',
         })

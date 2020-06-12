@@ -1,0 +1,8 @@
+CREATE TABLE logs (
+ id serial PRIMARY KEY,
+ torrent_name VARCHAR (200) NOT NULL,
+ info_hash VARCHAR (100) NOT NULL,
+ magnet text,
+ status integer,
+ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP 
+)
