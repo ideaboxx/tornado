@@ -25,7 +25,7 @@ export default function TorrentInput({ onUpdate }){
 
     return (
         <div className="flex my-3 p-1 border border-gray-400 rounded-md">
-            <input type="text" placeholder="Enter magnet link or torrent file path"
+            <input type="text" placeholder="Enter magnet link or torrent file"
                 value={inputText}
                 onChange={(e)=>setInputText(e.target.value)}
                 className="w-full focus:outline-none px-2"/>

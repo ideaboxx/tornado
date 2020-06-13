@@ -30,4 +30,11 @@ async function updateLog({id, infoHash, status}){
     }
 }
 
-module.exports = { getAllLogs, insertLog, updateLog }
+async function deleteLog(id){
+    if(!id) return
+    const query = "DELETE FROM logs WHERE id = $1"
+    const res = await pool.query(query, [id])
+    return res
+}
+
+module.exports = { getAllLogs, insertLog, updateLog, deleteLog }

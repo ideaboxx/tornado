@@ -25,9 +25,9 @@ function onReady(torrent){
         status: 0
     })
     torrent.on('done', ()=>{
-        db.updateLog({infoHash: torrent.infoHash, status: 2})
+        db.updateLog({infoHash: torrent.infoHash, status: 1})
         uploadToDrive(torrent).then(()=>{
-            db.updateLog({infoHash: torrent.infoHash, status: 3})
+            db.updateLog({infoHash: torrent.infoHash, status: 2})
         })
     })
 }
@@ -74,7 +74,7 @@ router.post('/actionDelete', function(req, res){
     const torrent = client.get(infoHash)
     try {
         torrent.destroy()
-        db.updateLog({infoHash: torrent.infoHash, status: 4})
+        db.updateLog({infoHash: torrent.infoHash, status: 3})
         res.send({
             status: 'success',
         })
@@ -120,8 +120,14 @@ router.post('/actionResume', function(req, res){
 
 router.get('/getLogs', function(req, res){
     db.getAllLogs().then(rows=>res.send({
-        status: 'success', data: rows
+        status: 'success', logs: rows
     }))
+})
+
+router.post('/deleteLog', function(req, res){
+    db.deleteLog(req.body.id)
+        .then(data=>res.send({ status: 'success'}))
+        .catch(err=>res.send({ status: 'fail', err }))
 })
 
 module.exports = router

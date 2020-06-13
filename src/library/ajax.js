@@ -25,10 +25,18 @@ export function getAllTorrent() {
     return fetch('/api/getAllTorrents').then((data)=>(data.json()))
 }
 
+export function getFiles(infoHash) {
+    return postData('/api/getFiles',{infoHash})
+}
+
 export function deleteTorrent(infoHash){
     return postData('/api/actionDelete', {infoHash})
 }
 
-export function getHistory() {
-    return fetch('/api/getHistory').then((data)=>(data.json()))
+export function getLogs() {
+    return fetch('/api/getLogs').then((data)=>(data.json()))
+}
+
+export function deleteLog(id) {
+    return postData('/api/deleteLog', {id})
 }

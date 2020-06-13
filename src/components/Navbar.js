@@ -19,7 +19,8 @@ export default function Navbar({active, onClick}){
             {
                 menuItems.map((item,i)=>(
                     <button key={i} onClick={()=>onClick(i)}
-                        className={"p-1 px-4 hover:bg-gray-200 text-blue-900 rounded-md "+(active === i?'text-blue-500':'')}> 
+                        className={"p-1 px-4 hover:bg-gray-200 focus:outline-none " 
+                            + (active === i ? 'text-blue-500 border-b-2 border-blue-300':'text-blue-900')}> 
                         {item.lable}
                     </button>
                 ))
