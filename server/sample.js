@@ -34,7 +34,7 @@ const config = {
 
 //["fmt_stream_map","
 
-fetch("https://drive.google.com/file/d/1Wb8P0HTMTWk1GmPJSfUCdpH2NSSY0aPU/edit", config)
+fetch("https://drive.google.com/file/d/1ywoGLYkbSGZy8nojNFPv9xIz-sAKz8sz/edit", config)
 .then(res => res.text()).then((data)=>{
     const streamsRaw = data.match(/(\["fmt_stream_map",")(.)+(\])/gm)[0]
     const arr = streamsRaw.substring(19).split(',')

@@ -21,7 +21,7 @@ export default function Files({ infoHash }) {
             <tbody>{
                 files.map((file)=><tr key={file.name}>
                     <td className="border px-2 py-2">
-                        <a href={file.path}>{file.name}</a>
+                        <a href={'/downloads/'+file.path}>{file.name}</a>
                     </td>
                     <td className="border px-2 py-2">{formatBytes(file.length)}</td>
                     <td className="border px-2 py-2">{round(file.progress*100, 1)}%</td>
