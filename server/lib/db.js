@@ -8,7 +8,7 @@ const pool = new Pool({
 })
 
 async function getAllLogs(){
-    const res = await pool.query('SELECT * from logs')
+    const res = await pool.query('SELECT * from logs ORDER BY created_at desc')
     return res.rows || []
 }
 
