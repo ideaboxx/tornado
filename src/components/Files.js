@@ -23,6 +23,8 @@ export default function Files({ infoHash }) {
               <a
                 href={"/downloads/" + file.path}
                 target="_blank"
+                without
+                rel="noopener noreferrer"
                 className="hover:text-blue-600"
               >
                 {file.name}
