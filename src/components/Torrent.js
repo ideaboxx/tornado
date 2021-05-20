@@ -96,7 +96,7 @@ export default function Torrent({ data }) {
         </span>
         {data.progress === 1 && (
           <span className="mx-3 text-green-600">
-            <a href="/zip?">DOWNLOAD</a>
+            <a href={`/zip?folderName=${data.name}`}>DOWNLOAD</a>
           </span>
         )}
       </div>

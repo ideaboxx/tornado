@@ -16,15 +16,12 @@ app.use("/api", api);
 // Send downloaded folder as zip
 app.get("/zip", (req, res) => {
   const { folderName } = req.query;
-  const fullpath = path.join(
-    constant.downloadPath,
-    folderName.replace(" ", "_")
-  );
-  const cmd = `find ${fullpath} -path '*/.*' -prune -o -type f -print | zip ${fullpath}.zip -@`;
+  const srcFolder = path.join(constant.downloadPath, folderName);
+  const destFolder = srcFolder + ".zip";
+  const cmd = `find "${srcFolder}" -path '*/.*' -prune -o -type f -print | zip -0 "${destFolder}" -@`;
   exec(cmd, (err, stdout, stderr) => {
-    console.log(stdout);
-    if (err || stderr) console.error(err || stderr);
-    res.sendFile(`${fullpath}.zip`);
+    if (err || stderr) return console.error(err || stderr);
+    res.redirect("/downloads/" + folderName + ".zip");
   });
 });
 
