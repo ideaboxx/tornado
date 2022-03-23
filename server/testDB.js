@@ -11,5 +11,7 @@ const pool = new Pool({
 });
 
 pool
-  .query(`select * from logs`)
-  .then((data) => console.log("Row count", data.rowCount));
+  .query(
+    `SELECT * from users where email='ss' and password_hash='hello' ORDER BY created_at desc;`
+  )
+  .then((data) => console.log(data.rows));

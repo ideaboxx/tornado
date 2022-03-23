@@ -8,14 +8,18 @@ export default function Authenticate({ onSuccess }) {
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;
-    const content = await e.target[2].files[0].text();
     if (loginType) {
+      console.log("Login req");
       signin(email, password).then((data) => {
-        onSuccess(data.uid);
+        if (data.uid) onSuccess(data.uid);
+        else alert(data.err);
       });
     } else {
-      signup(email, password, content).then((data) => {
-        onSuccess(data.uid);
+      console.log("Signup req");
+      const key = await e.target[2].files[0].text();
+      signup(email, password, key).then((data) => {
+        if (data.uid) onSuccess(data.uid);
+        else alert(data.err);
       });
     }
   };

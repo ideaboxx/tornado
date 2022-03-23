@@ -20,6 +20,15 @@ function App() {
   const [uid, setUid] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
 
+  const onMenuItemSelection = (i) => {
+    setActiveTab(i);
+    if (i === 1) historyList();
+    if (i === 2) {
+      localStorage.clear();
+      setUid(null);
+    }
+  };
+
   const onInput = (data) => {
     addTorrent(data).then(console.log);
   };
@@ -49,13 +58,7 @@ function App() {
       <div className="w-full max-w-3xl mx-auto h-screen p-2">
         {uid ? (
           <React.Fragment>
-            <Navbar
-              onClick={(i) => {
-                setActiveTab(i);
-                historyList();
-              }}
-              active={activeTab}
-            />
+            <Navbar onClick={onMenuItemSelection} active={activeTab} />
             <TorrentInput onUpdate={onInput} />
             {activeTab === 0
               ? torrentList.map((data, i) => <Torrent key={i} data={data} />)

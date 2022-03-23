@@ -1,14 +1,29 @@
 const { Pool } = require("pg");
 const constants = require("./constants.json");
 
-//vacofoh437@qkerbl.com - thisismyfirstven...
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || constants.postgresDev,
   ssl: {
     rejectUnauthorized: false,
   },
 });
+
+pool.query(`CREATE TABLE IF NOT EXISTS logs (
+ id serial PRIMARY KEY,
+ torrent_name VARCHAR (200) NOT NULL,
+ info_hash VARCHAR (100) NOT NULL,
+ magnet text,
+ status integer,
+ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP 
+)`);
+
+pool.query(`CREATE TABLE IF NOT EXISTS users (
+ id VARCHAR (200) PRIMARY KEY,
+ email VARCHAR (200) NOT NULL,
+ password_hash VARCHAR (100) NOT NULL,
+ key text,
+ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP 
+)`);
 
 async function getAllLogs() {
   const res = await pool.query("SELECT * from logs ORDER BY created_at desc");
@@ -41,4 +56,30 @@ async function deleteLog(id) {
   return res;
 }
 
-module.exports = { getAllLogs, insertLog, updateLog, deleteLog };
+async function signup({ id, email, password, key }) {
+  const query =
+    "Insert into users(id, email, password_hash, key) values($1,$2,$3,$4) RETURNING *";
+  const res = await pool.query(query, [id, email, password, key]);
+  return res.rows || [];
+}
+
+async function getUser({ id, email, password }) {
+  if (id) {
+    const res = await pool.query("SELECT * from users where id=$1", [id]);
+    return res.rows[0] || {};
+  } else {
+    const q =
+      "SELECT * from users where email=$1 and password_hash=$2 ORDER BY created_at desc";
+    const res = await pool.query(q, [email, password]);
+    return res.rows[0] || {};
+  }
+}
+
+module.exports = {
+  getAllLogs,
+  insertLog,
+  updateLog,
+  deleteLog,
+  signup,
+  getUser,
+};
