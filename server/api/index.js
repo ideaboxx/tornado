@@ -88,12 +88,8 @@ router.post("/addTorrent", function (req, res) {
       status: "fail",
       err: "No uid",
     });
-  if (!magnet || !magnet.startsWith("magnet"))
-    return res.send({
-      status: "fail",
-      err: "Invalid magnet url",
-    });
   const torrentId = magnet || Buffer.from(torrentFile, "base64");
+  if (!torrentId) res.send({ status: "fail", err: "torrentId empty" });
   client.add(torrentId, { path: constant.downloadPath }, onReady(uid));
   console.log(">> torrent added");
   res.send({
