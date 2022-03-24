@@ -1,4 +1,4 @@
-const gdriveFS = require("@ideabox/cloud-drive").default;
+const gdriveFS = require("@ideabox/cloud-drive");
 const fs = require("fs");
 const path = require("path");
 
@@ -21,19 +21,23 @@ module.exports = async (key, rootPath) => {
     const dirname = path.basename(rootPath);
     try {
       const folder = await g.createFolder(dirname, parentId);
-      fs.readdirSync(rootPath).forEach(async (file) => {
+      for (const file of fs.readdirSync(rootPath)) {
         console.log("->", file);
         const filepath = path.join(rootPath, file);
         if (fs.lstatSync(filepath).isDirectory()) {
           await uploadFolder(filepath, folder.id);
         } else {
-          await g.uploadFile(fs.createReadStream(filepath), {
-            name: file,
-            size: fs.statSync(filepath).size,
-            parentId: folder.id,
-          });
+          try {
+            await g.uploadFile(fs.createReadStream(filepath), {
+              name: file,
+              size: fs.statSync(filepath).size,
+              parentId: folder.id,
+            });
+          } catch (e) {
+            console.log(e);
+          }
         }
-      });
+      }
     } catch (e) {
       console.log(e);
     }
