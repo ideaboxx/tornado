@@ -27,11 +27,15 @@ module.exports = async (key, rootPath) => {
         if (fs.lstatSync(filepath).isDirectory()) {
           await uploadFolder(filepath, folder.id);
         } else {
-          await g.uploadFile(fs.createReadStream(filepath), {
-            name: file,
-            size: fs.statSync(filepath).size,
-            parentId: folder.id,
-          });
+          try {
+            await g.uploadFile(fs.createReadStream(filepath), {
+              name: file,
+              size: fs.statSync(filepath).size,
+              parentId: folder.id,
+            });
+          } catch (e) {
+            console.log(e);
+          }
         }
       }
     } catch (e) {
