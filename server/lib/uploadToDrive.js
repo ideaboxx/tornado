@@ -1,9 +1,9 @@
-const gdriveFS = require("@ideabox/cloud-drive");
+const GdriveFS = require("@ideabox/cloud-drive-fs").default;
 const fs = require("fs");
 const path = require("path");
 
 module.exports = async (key, rootPath) => {
-  const g = new gdriveFS({ masterKeyFile: key });
+  const g = new GdriveFS({ key: key });
 
   const list = await g.getFilesAndFolders();
   const filteredList = list.filter((item) => item.name === "tornedo-downloads");
