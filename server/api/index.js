@@ -102,9 +102,11 @@ router.post("/getFiles", function (req, res) {
   const { infoHash } = req.body;
   const torrent = client.get(infoHash);
   const files = [];
-  for (const file of torrent.files) {
-    const { name, path, length, downloaded, progress } = file;
-    files.push({ name, path, length, downloaded, progress });
+  if (torrent && torrent.files) {
+    for (const file of torrent.files) {
+      const { name, path, length, downloaded, progress } = file;
+      files.push({ name, path, length, downloaded, progress });
+    }
   }
   res.send({ status: "success", files });
 });

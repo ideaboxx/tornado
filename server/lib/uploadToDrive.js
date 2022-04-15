@@ -24,7 +24,7 @@ const uploadFolder = async (rootPath, parentId, g) => {
         console.log("->", file);
         const filepath = path.join(rootPath, file);
         if (fs.lstatSync(filepath).isDirectory()) {
-          await uploadFolder(filepath, folder.id);
+          await uploadFolder(filepath, folder.id, g);
         } else {
           await uploadFile(filepath, file, folder.id, g);
         }
