@@ -1,6 +1,10 @@
 import client from "@lib/torrentClient";
+import { getToken } from "@lib/utils";
 
 export default function torrentFiles(req, res) {
+    const token = getToken(req, res);
+    if (!token) return res.status(401).send({ error: "Authentication invalid" });
+
     const { infoHash } = req.body;
     const torrent = client.get(infoHash);
     const files = [];

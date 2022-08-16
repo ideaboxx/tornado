@@ -2,8 +2,8 @@ import db from "@lib/db";
 import { calcHash } from "@lib/utils";
 
 export default async function users(req, res) {
-    const result = await db.query("select * from usersTable");
-    res.send(result.rows);
+    //const result = await db.query("select * from usersTable");
+    //res.send(result.rows);
 }
 /*
 res.send(

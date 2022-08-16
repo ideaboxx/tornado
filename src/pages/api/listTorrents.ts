@@ -1,10 +1,13 @@
 import db from "@lib/db";
 import client from "@lib/torrentClient";
+import { getToken } from "@lib/utils";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function listTorrents(req: NextApiRequest, res: NextApiResponse) {
-    const torrents = [];
+    const token = getToken(req, res);
+    if (!token) return res.status(401).send({ error: "Authentication invalid" });
 
+    const torrents = [];
     for (const torrent of client.torrents) {
         const {
             name,

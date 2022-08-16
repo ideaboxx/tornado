@@ -1,4 +1,4 @@
-import { useBreakpointValue, useInterval } from "@chakra-ui/react";
+import { useBreakpointValue } from "@chakra-ui/react";
 import Header from "@components/Header";
 import Sidebar from "@components/Sidebar";
 

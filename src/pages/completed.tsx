@@ -9,18 +9,24 @@ import {
 import Empty from "@components/Empty";
 import axios from "axios";
 import Layout from "layouts";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function completed() {
     const [torrents, setTorrents] = useState([]);
     const breakpt = useBreakpointValue({ base: "base", md: "md" });
     const [flag, setFlag] = useBoolean(true);
+    const router = useRouter();
 
     useInterval(() => {
         axios
             .get("/api/listCompleted")
             .then(({ data }) => {
                 setTorrents(data.list);
+            })
+            .catch((e) => {
+                console.error(e);
+                router.replace("/");
             })
             .finally(() => setFlag.off());
     }, 1000);
