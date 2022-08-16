@@ -18,6 +18,7 @@ interface propType {
     paused: boolean;
     done: boolean;
     length: number;
+    uploadedToDrive: boolean;
 }
 
 export default function Torrent(props: propType) {
@@ -28,12 +29,14 @@ export default function Torrent(props: propType) {
     return (
         <div className="p-4 my-2 bg-gray-800 rounded-md">
             <div className="border-l-2 border-teal-500 text-teal-500 px-2 text-sm mt-2 mb-3 font-semibold">
-                {humanFileSize(props.downloaded)} of {humanFileSize(props.length)} -{" "}
-                {round(props.progress * 100)}%
+                {showStatus(props)}
             </div>
             <div className="font-semibold my-2">{props.name}</div>
             <div className="text-gray-400 text-sm my-2">
-                {props.numPeers} peer &middot; {round(props.ratio)} ratio
+                {props.numPeers} peer &middot; {round(props.ratio)} ratio &middot;{" "}
+                <VscArrowDown className="inline" /> {humanFileSize(props.downloadSpeed)}/s
+                &middot; <VscArrowUp className="inline" />{" "}
+                {humanFileSize(props.uploadSpeed)}/s
             </div>
             <div className="my-3 py-3">
                 <Progress
@@ -45,14 +48,7 @@ export default function Torrent(props: propType) {
             </div>
             <div className="my-3 space-x-2">
                 <Button size={"sm"}>Show Files</Button>
-                <Button size={"sm"} leftIcon={<VscArrowDown />}>
-                    {humanFileSize(props.downloadSpeed)}/s
-                </Button>
-                <Button size={"sm"} leftIcon={<VscArrowUp />}>
-                    {humanFileSize(props.uploadSpeed)}/s
-                </Button>
                 <Button
-                    className="float-right"
                     colorScheme="red"
                     variant="ghost"
                     size={"sm"}
@@ -63,4 +59,14 @@ export default function Torrent(props: propType) {
             </div>
         </div>
     );
+}
+
+function showStatus(props) {
+    if (props.done && !props.uploadedToDrive) return "Uploading to drive";
+    else if (props.uploadedToDrive) return "Uploaded to drive";
+    else {
+        return `${humanFileSize(props.downloaded)} of ${humanFileSize(
+            props.length
+        )} - ${round(props.progress * 100)}%`;
+    }
 }

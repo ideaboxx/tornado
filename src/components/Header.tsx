@@ -15,6 +15,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import { GoFileSubmodule } from "react-icons/go";
 import { MdMenu } from "react-icons/md";
+import AddTorrent from "./AddTorrent";
+import If from "./If";
 import SettingsBtn from "./SettingsBtn";
 import Sidebar from "./Sidebar";
 
@@ -28,8 +30,7 @@ export default function Header({ index }: propType) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const action = () => {
-        if (breakpt == "md") router.replace("/dashboard");
-        else if (router.query.id) router.back();
+        router.replace("/dashboard");
     };
 
     return (
@@ -50,7 +51,6 @@ export default function Header({ index }: propType) {
                 <Button
                     leftIcon={breakpt == "md" ? <GoFileSubmodule /> : null}
                     variant="ghost"
-                    aria-label={"User settings"}
                     onClick={action}
                 >
                     Tornado{" "}
@@ -71,6 +71,9 @@ export default function Header({ index }: propType) {
                     Logout
                 </Button>
             </Box>
+            <If condition={breakpt == "md" ? false : true}>
+                <AddTorrent size={breakpt == "md" ? "md" : "sm"} />
+            </If>
         </React.Fragment>
     );
 }

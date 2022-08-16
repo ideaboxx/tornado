@@ -19,7 +19,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { VscCloudUpload, VscFileCode, VscGear } from "react-icons/vsc";
 
-export default function SettingsBtn({}) {
+export default function SettingsBtn(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [loading, setLoading] = useBoolean(false);
     const [form, setForm] = useState<any>({
@@ -86,7 +86,7 @@ export default function SettingsBtn({}) {
 
     return (
         <>
-            <Button leftIcon={<VscGear />} variant="ghost" onClick={onOpen}>
+            <Button leftIcon={<VscGear />} variant="ghost" onClick={onOpen} {...props}>
                 Account
             </Button>
             <AlertDialog

@@ -1,4 +1,12 @@
-import { Box, Heading, useBreakpointValue, useInterval, VStack } from "@chakra-ui/react";
+import {
+    Box,
+    Heading,
+    useBoolean,
+    useBreakpointValue,
+    useInterval,
+    VStack,
+} from "@chakra-ui/react";
+import Empty from "@components/Empty";
 import Torrent from "@components/Torrent";
 import axios from "axios";
 import Layout from "layouts";
@@ -7,11 +15,15 @@ import { useState } from "react";
 export default function dashboard() {
     const [torrents, setTorrents] = useState([]);
     const breakpt = useBreakpointValue({ base: "base", md: "md" });
+    const [flag, setFlag] = useBoolean(true);
 
     useInterval(() => {
-        axios.get("/api/listTorrents").then(({ data }) => {
-            setTorrents(data.torrents);
-        });
+        axios
+            .get("/api/listTorrents")
+            .then(({ data }) => {
+                setTorrents(data.torrents);
+            })
+            .finally(() => setFlag.off());
     }, 1000);
 
     return (
@@ -25,9 +37,7 @@ export default function dashboard() {
                         <Torrent {...t} />
                     ))}
                     {torrents.length == 0 && (
-                        <Box color={"gray.500"} bg="gray.700" p="8" rounded={"md"} my="4">
-                            No active downloads
-                        </Box>
+                        <Empty showSpinner={flag} placeholder="No active torrents" />
                     )}
                 </VStack>
             </div>

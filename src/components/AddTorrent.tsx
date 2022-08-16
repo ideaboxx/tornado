@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import { useRef } from "react";
 import { VscAdd } from "react-icons/vsc";
+import If from "./If";
 
 export default function AddTorrent(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,9 +33,16 @@ export default function AddTorrent(props) {
 
     return (
         <>
-            <Button width={"full"} leftIcon={<VscAdd />} onClick={onOpen}>
-                Add Torrent
-            </Button>
+            <If condition={props.size != "sm"}>
+                <Button width={"full"} leftIcon={<VscAdd />} onClick={onOpen}>
+                    Add Torrent
+                </Button>
+            </If>
+            <If condition={props.size == "sm"}>
+                <Button onClick={onOpen}>
+                    <VscAdd />
+                </Button>
+            </If>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

@@ -4,17 +4,14 @@ interface propType {
     icon: any;
     text: string;
     isActive: boolean;
-    path: string;
 }
 
-export default function SidebarListItem({ icon, text, isActive, path }: propType) {
-    const router = useRouter();
+export default function SidebarListItem({ icon, text, isActive }: propType) {
     return (
         <div
             className={`${
                 isActive ? "bg-gray-700 text-white" : "text-gray-400"
             } rounded-md px-2 py-1 cursor-pointer`}
-            onClick={() => router.replace(path)}
         >
             <div className="inline-block p-2 align-middle">{icon}</div>
             <div className="font-semibold inline-block align-middle px-2 text-sm">

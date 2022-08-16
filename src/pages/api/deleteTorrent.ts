@@ -7,7 +7,9 @@ export default function deleteTorrent(req: NextApiRequest, res: NextApiResponse)
     const torrent = client.get(infoHash);
     try {
         torrent.destroy();
-        db.updateLog({ infoHash: torrent.infoHash, status: 3 });
+        if (!torrent.done) {
+            db.updateLog({ infoHash: torrent.infoHash, status: 3 });
+        }
         res.send({
             status: "success",
         });

@@ -36,9 +36,11 @@ function onReady(userId: string) {
             status: 0,
         });
         torrent.on("done", async () => {
+            console.log("[submitTorrent] Done downloading:", torrent.name);
             db.updateLog({ infoHash: torrent.infoHash, status: 1 });
             await uploadToDrive(userId, path.join(torrent.path, torrent.name));
             db.updateLog({ infoHash: torrent.infoHash, status: 2 });
+            console.log("[submitTorrent] Done uploading:", torrent.name);
         });
     };
 }
