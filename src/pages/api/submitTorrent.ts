@@ -21,7 +21,6 @@ export default function submitTorrent(req: NextApiRequest, res: NextApiResponse)
     }
 
     client.add(torrent, { path: config.downloadPath }, onReady(uuid));
-    console.log(">> torrent added");
     res.send({
         status: "success",
     });

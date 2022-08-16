@@ -2,6 +2,7 @@ import { Button, Progress } from "@chakra-ui/react";
 import { humanFileSize, round } from "@lib/utils";
 import axios from "axios";
 import { VscArrowDown, VscArrowUp } from "react-icons/vsc";
+import TorrentFilesBtn from "./TorrentFilesBtn";
 
 interface propType {
     name: string;
@@ -47,7 +48,7 @@ export default function Torrent(props: propType) {
                 />
             </div>
             <div className="my-3 space-x-2">
-                <Button size={"sm"}>Show Files</Button>
+                <TorrentFilesBtn size="sm" infoHash={props.infoHash} />
                 <Button
                     colorScheme="red"
                     variant="ghost"

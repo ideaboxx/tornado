@@ -1,6 +1,5 @@
 import {
     Button,
-    Text,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -8,26 +7,48 @@ import {
     ModalBody,
     Input,
     Center,
-    VStack,
     ModalFooter,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useRef } from "react";
 import { VscAdd } from "react-icons/vsc";
 import If from "./If";
+import Dropzone from "react-dropzone";
 
 export default function AddTorrent(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const input = useRef<HTMLInputElement>();
+    const toast = useToast();
 
     const submit = async () => {
         const magnet = input.current.value;
-        if (magnet) {
-            const { data } = await axios.post("/api/submitTorrent", {
-                magnet,
+        if (magnet && magnet.startsWith("magnet")) {
+            await axios.post("/api/submitTorrent", { magnet });
+        } else {
+            toast({
+                position: "top",
+                status: "warning",
+                title: "Invalid input value",
             });
         }
+        onClose();
+    };
+
+    const onDrop = (files) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", (event) => {
+            let base64 = event.target.result;
+            if (typeof base64 == "string") {
+                const torrentFile = base64.replace(
+                    "data:application/x-bittorrent;base64,",
+                    ""
+                );
+                axios.post("/api/submitTorrent", { torrentFile });
+            }
+        });
+        reader.readAsDataURL(files[0]);
         onClose();
     };
 
@@ -49,16 +70,26 @@ export default function AddTorrent(props) {
                     <ModalHeader>Add Torrent</ModalHeader>
                     <ModalBody>
                         <Input variant={"filled"} placeholder="Magnet link" ref={input} />
-                        <div className="p-2 border-dashed border-2 border-gray-600 rounded my-3">
-                            <Center h="28" className="bg-gray-700 rounded">
-                                <VStack spacing={"4"}>
-                                    <Text color={"gray.400"}>
-                                        Upload or drop .torrent file
-                                    </Text>
-                                    <Button size="sm">Upload file</Button>
-                                </VStack>
-                            </Center>
-                        </div>
+
+                        <Dropzone onDrop={onDrop}>
+                            {({ getRootProps, getInputProps, isDragActive }) => (
+                                <div className="p-2 border-dashed border-2 border-gray-600 rounded my-3">
+                                    <Center
+                                        h="28"
+                                        className={`${
+                                            isDragActive ? "bg-teal-700" : "bg-gray-700"
+                                        } rounded`}
+                                        {...getRootProps()}
+                                    >
+                                        <input {...getInputProps()} />
+                                        <span className="text-gray-400 font-semibold text-sm">
+                                            Drag 'n' drop .torrent file here, or click to
+                                            select file
+                                        </span>
+                                    </Center>
+                                </div>
+                            )}
+                        </Dropzone>
                     </ModalBody>
 
                     <ModalFooter>
@@ -73,4 +104,11 @@ export default function AddTorrent(props) {
             </Modal>
         </>
     );
+}
+function useDropzone(arg0: { onDrop: (...args: any[]) => any }): {
+    getRootProps: any;
+    getInputProps: any;
+    isDragActive: any;
+} {
+    throw new Error("Function not implemented.");
 }

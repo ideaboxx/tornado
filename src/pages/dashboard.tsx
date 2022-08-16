@@ -28,13 +28,13 @@ export default function dashboard() {
 
     return (
         <Layout>
-            <div className={`${breakpt == "md" ? "p-7" : "p-4"}`}>
+            <div className={`${breakpt == "md" ? "p-7" : "p-4"} overflow-y-auto`}>
                 <Heading size={"md"} className="mb-4">
                     Active
                 </Heading>
                 <VStack align="stretch">
                     {torrents.map((t) => (
-                        <Torrent {...t} />
+                        <Torrent {...t} key={t.infoHash} />
                     ))}
                     {torrents.length == 0 && (
                         <Empty showSpinner={flag} placeholder="No active torrents" />

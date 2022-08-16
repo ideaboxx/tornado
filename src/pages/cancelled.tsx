@@ -33,7 +33,7 @@ export default function cancelled() {
                 </Heading>
                 <VStack align="stretch">
                     {torrents.map((t) => (
-                        <Item {...t} />
+                        <Item {...t} key={t.info_hash} />
                     ))}
                     {torrents.length == 0 && (
                         <Empty showSpinner={flag} placeholder="No items to display" />
@@ -48,18 +48,32 @@ interface propType {
     torrent_name: string;
     info_hash: string;
     id: string;
+    magnet: string;
 }
 
 function Item(props: propType) {
+    const copyToClipboard = (text) => {
+        var dummy = document.createElement("textarea");
+        // dummy.style.display = 'none'
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+    };
+
     const del = () => {
         axios.post("/api/deleteLog", { id: props.id });
     };
+
     return (
         <div className="p-4 my-2 bg-gray-800 rounded-md">
             <div className="font-semibold my-2">{props.torrent_name}</div>
             <div className="text-gray-400 text-sm my-2">Info Hash: {props.info_hash}</div>
             <div className="mt-3 space-x-2">
-                <Button size={"sm"}>Copy Magnet</Button>
+                <Button size={"sm"} onClick={() => copyToClipboard(props.magnet)}>
+                    Copy Magnet
+                </Button>
                 <Button size={"sm"} colorScheme="red" variant={"ghost"} onClick={del}>
                     Delete
                 </Button>
