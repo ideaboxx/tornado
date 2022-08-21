@@ -2,7 +2,7 @@ import * as db from "@lib/db";
 import Cookies from "cookies";
 
 export default async function signup(req, res) {
-    const { email, password, key } = req.body;
+    const { email, password, key, keepLoggedIn } = req.body;
     if (!email || !password || !key || !key.contents)
         return res.status(400).send("bad request");
 
@@ -17,6 +17,8 @@ export default async function signup(req, res) {
     });
 
     const cookies = new Cookies(req, res);
-    cookies.set("token", newUser.uuid);
+    const config = { sameSite: true };
+    if (keepLoggedIn) config["maxAge"] = Date.now() + 6 * 24 * 60 * 60 * 1000;
+    cookies.set("token", user.uuid, config);
     res.send(newUser);
 }
