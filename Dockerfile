@@ -1,11 +1,12 @@
-FROM node:19.5.0-alpine
+FROM node:19-buster
 
 WORKDIR /app
-COPY . .
+COPY package*.json ./
 
 RUN npm i
 
-RUN npx browserslist@latest --update-db 
-RUN npm run build
+COPY . .
+EXPOSE  3000
 
+RUN npm run build
 CMD npm run dev
