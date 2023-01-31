@@ -2,7 +2,6 @@ import * as db from "@lib/db";
 import { uploadToDrive } from "@lib/gdrive";
 import client from "@lib/torrentClient";
 import { getToken } from "@lib/utils";
-import axios from "axios";
 import config from "config";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
@@ -21,7 +20,11 @@ export default function submitTorrent(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).send({ error: "Invalid Magnet or torrent file" });
     }
 
-    client.add(torrent, { path: config.downloadPath }, onReady(uuid));
+    client.add(
+        torrent,
+        { path: process.env.DOWNLOAD_PATH || config.downloadPath },
+        onReady(uuid)
+    );
     res.send({
         status: "success",
     });
@@ -29,7 +32,6 @@ export default function submitTorrent(req: NextApiRequest, res: NextApiResponse)
 
 function onReady(userId: string) {
     return (torrent) => {
-        keepAlive();
         db.insertLog({
             torrentName: torrent.name,
             infoHash: torrent.infoHash,
@@ -44,19 +46,4 @@ function onReady(userId: string) {
             console.log("[submitTorrent] Done uploading:", torrent.name);
         });
     };
-}
-
-let intervalObj;
-function keepAlive() {
-    if (!intervalObj) {
-        intervalObj = setInterval(async () => {
-            let notDone = client.torrents.map((t) => !t.done);
-            if (notDone.length == 0) {
-                clearInterval(intervalObj);
-            } else {
-                await axios.get("https://tornedo.herokuapp.com");
-                console.log("Pinging tornedo...");
-            }
-        }, 5 * 60 * 1000);
-    }
 }

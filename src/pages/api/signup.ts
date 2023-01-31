@@ -1,6 +1,15 @@
 import * as db from "@lib/db";
 import Cookies from "cookies";
 
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: "20mb",
+        },
+        responseLimit: false,
+    },
+};
+
 export default async function signup(req, res) {
     const { email, password, key, keepLoggedIn } = req.body;
     if (!email || !password || !key || !key.contents)
@@ -19,6 +28,6 @@ export default async function signup(req, res) {
     const cookies = new Cookies(req, res);
     const config = { sameSite: true };
     if (keepLoggedIn) config["maxAge"] = Date.now() + 6 * 24 * 60 * 60 * 1000;
-    cookies.set("token", user.uuid, config);
+    cookies.set("token", newUser.uuid, config);
     res.send(newUser);
 }

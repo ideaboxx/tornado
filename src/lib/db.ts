@@ -1,20 +1,26 @@
 import registerService from "./registerService";
 import { Pool } from "pg";
 import { calcHash } from "./utils";
-import { randomUUID } from "crypto";
-const connectionString = process.env.DATABASE_URL;
+import * as fs from "fs";
 
-if (!connectionString) {
-    console.error("Database url is empty, set env variable 'DATABASE_URL'");
+let password = process.env.DB_PASSWORD;
+
+if (process.env.DB_PASSWORD_FILE) {
+    password = fs.readFileSync(process.env.DB_PASSWORD_FILE, "utf-8").trim();
+}
+
+if (!password) {
+    console.error(`Database Password Invalid: '${process.env.DB_PASSWORD}'`);
     process.exit(1);
 }
 
 const pool = registerService("db", () => {
     const pool = new Pool({
-        connectionString,
-        ssl: {
-            rejectUnauthorized: false,
-        },
+        user: process.env.DB_USER,
+        database: process.env.DB_DATABASE,
+        password: password,
+        port: parseInt(process.env.DB_PORT || "5432"),
+        host: process.env.DB_HOST || "db",
     });
     createTables(pool);
     return pool;
@@ -31,7 +37,7 @@ async function createTables(pool) {
         key JSON NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP 
      )`);
-
+    console.log("User table created..");
     await pool.query(`
     CREATE TABLE IF NOT EXISTS logs (
       id serial PRIMARY KEY,
@@ -74,6 +80,7 @@ export async function deleteLog(id) {
 }
 
 export async function signup({ email, password, key }) {
+    console.log("adding user..");
     const query =
         "Insert into usersTable(uuid, email, password, key) values($1,$2,$3,$4) RETURNING *";
     const res = await pool.query(query, [
