@@ -1,3 +1,3 @@
 export default {
-    downloadPath: "/tmp/torrent/",
+    downloadPath: "/torrent",
 };
