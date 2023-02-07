@@ -1,4 +1,5 @@
 import * as db from "@lib/db";
+import * as fs from "fs";
 import { uploadToDrive } from "@lib/gdrive";
 import client from "@lib/torrentClient";
 import { getToken } from "@lib/utils";
@@ -43,6 +44,7 @@ function onReady(userId: string) {
             db.updateLog({ infoHash: torrent.infoHash, status: 1 });
             await uploadToDrive(userId, path.join(torrent.path, torrent.name));
             db.updateLog({ infoHash: torrent.infoHash, status: 2 });
+            fs.rmSync(path.join(torrent.path, torrent.name), { recursive: true, force: true })
             console.log("[submitTorrent] Done uploading:", torrent.name);
         });
     };
