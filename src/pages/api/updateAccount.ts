@@ -1,6 +1,15 @@
 import db from "@lib/db";
 import { calcHash, getToken } from "@lib/utils";
 
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: "20mb",
+        },
+        responseLimit: false,
+    },
+};
+
 export default async function updateAccount(req, res) {
     const { email, current, newpassword, key } = req.body;
     const uuid = getToken(req, res);
