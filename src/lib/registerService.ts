@@ -5,12 +5,14 @@
  * @arg {function} initFn Function returning the service instance.
  * @return {*} Service instance.
  */
-export default function registerService(name, initFn) {
-    if (process.env.NODE_ENV === "development") {
-        if (!(name in global)) {
-            global[name] = initFn();
-        }
-        return global[name];
-    }
-    return initFn();
-}
+const registerService = (name, initFn) => {
+	if (process.env.NODE_ENV === 'development') {
+		if (!(name in global)) {
+			global[name] = initFn();
+		}
+		return global[name];
+	}
+	return initFn();
+};
+
+export default registerService;

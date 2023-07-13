@@ -1,16 +1,14 @@
 version: "3.9"
 
 services:
-    tornado:
+    app:
         build: .
         environment:
             DB_USER: root
-            DB_PASSWORD: testpassword
+            DB_PASSWORD: password
             DB_DATABASE: general
         ports:
-            - "3000:3000"
-        volumes:
-            - "/workspaces/tornado/test:/root"
+            - "49152:3000"
 
     db:
         image: postgres:latest
@@ -18,8 +16,6 @@ services:
         ports:
             - "5432:5432"
         environment:
-            POSTGRES_PASSWORD: testpassword
             POSTGRES_USER: root
+            POSTGRES_PASSWORD: password
             POSTGRES_DB: general
-        volumes:
-            - "/tmp/db:/var/lib/postgresql/data"

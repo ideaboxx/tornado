@@ -1,3 +1,4 @@
-export default {
-    downloadPath: "/downloads",
+const downloadObject = {
+	downloadPath: '/downloads'
 };
+export default downloadObject;

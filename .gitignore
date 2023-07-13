@@ -4,3 +4,4 @@ build
 test*
 env.sh
 .next
+cachedFiles

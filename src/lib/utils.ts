@@ -27,8 +27,8 @@ export function validateEmail(email: string) {
         );
 }
 
-export function calcHash(somestring: string) {
-    return crypto.createHash("md5").update(somestring).digest("hex").toString();
+export function calcHash(value: string) {
+    return crypto.createHash("md5").update(value).digest("hex").toString();
 }
 
 export function getToken(req, res) {

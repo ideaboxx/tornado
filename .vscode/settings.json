@@ -3,5 +3,8 @@
     "editor.tabSize": 4,
     "prettier.tabWidth": 4,
     "prettier.printWidth": 90,
-    "editor.fontSize": 14
+    "editor.fontSize": 14,
+    "cSpell.words": [
+        "tornedo"
+    ]
 }
