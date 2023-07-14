@@ -8,4 +8,5 @@ RUN rm -rf node_modules
 RUN npm i
 
 EXPOSE 3000
+RUN npm run build
 CMD npm run start
