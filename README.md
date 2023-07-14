@@ -1,19 +1,5 @@
-This project is developed for personal use only.
+# cloud-drive-browser
 
-Web app to download torrents offsite and then upload it on gdrive.
-Optionally, it could be downloaded to local machine once torrent download finishes.
+File browser app for `cloud-drive-fs`
 
-## Available Scripts
-
-Starts react app with proxy to localhost:8080 `npm run start`
-Build recat app for deployment `npm run build`
-To start the API server `node ./server/index.js`
-
-## Hosting
-
-This app requires postgres server for storing data for completed and uploaded torrents
-This app is designed to specifically use heroku and heroku-postgres, so yeah its totally free to run.
-
-## License
-
-All code is available under MIT with proper attributions.
+To run this application you need to get `masterKey.json` file which can be creating using script provided in `cloud-drive-tools` git repo.
